@@ -50,4 +50,19 @@ public class Topico {
         this.curso = dtoRegistroTopico.curso();
     }
 
+    public void actualizarDatos(DTOActualizarTopico dtoActualizarTopico){
+
+        if(dtoActualizarTopico.mensaje()!=null){
+            this.mensaje = dtoActualizarTopico.mensaje();
+        }
+
+        if(dtoActualizarTopico.titulo()!=null){
+            this.titulo = dtoActualizarTopico.titulo();
+        }
+
+        if(dtoActualizarTopico.status()!=null){
+            this.status = dtoActualizarTopico.status();
+        }
+    }
+
 }
