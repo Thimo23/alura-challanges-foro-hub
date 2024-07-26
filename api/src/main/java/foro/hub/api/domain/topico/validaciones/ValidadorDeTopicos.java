@@ -1,8 +1,14 @@
 package foro.hub.api.domain.topico.validaciones;
 
+import foro.hub.api.domain.topico.DTOActualizarTopico;
 import foro.hub.api.domain.topico.DTORegistroTopico;
 
 public interface ValidadorDeTopicos {
-    public void validar(String titulo, String mensaje);
+
+    //Valida para registrar un topico
+    public void validar(DTORegistroTopico datos);
+
+    //Valida para actualizar un topico
+    public void validar(DTOActualizarTopico datos);
 
 }
