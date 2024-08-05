@@ -31,10 +31,11 @@ public class SecurityConfigurations {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
                         .anyRequest()
                         .authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(e-> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+               .exceptionHandling(e-> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 
         return httpSecurity.build();
 

@@ -1,11 +1,13 @@
 package foro.hub.api.domain.topico;
 
 
+import foro.hub.api.domain.curso.Curso;
 import foro.hub.api.domain.usuarios.Usuario;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -33,21 +35,24 @@ public class Topico {
     @Column(nullable = false)
     private TopicStatus status;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "autor_id",nullable = false)
     private Usuario autor;
 
-    @Column(nullable = false)
-    private String curso;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "curso_id",nullable = false)
+    private Curso curso;
 
     public Topico(DTORegistroTopico dtoRegistroTopico) {
         this.titulo = dtoRegistroTopico.titulo();
         this.mensaje = dtoRegistroTopico.mensaje();
         this.fechaCreacion = new Date();
         this.status = dtoRegistroTopico.status();
-        this.autor = dtoRegistroTopico.autor();
-        this.curso = dtoRegistroTopico.curso();
+        this.curso = new Curso(
+                dtoRegistroTopico.curso().nombre(),
+                dtoRegistroTopico.curso().categoria());
     }
 
     public void actualizarDatos(DTOActualizarTopico dtoActualizarTopico){

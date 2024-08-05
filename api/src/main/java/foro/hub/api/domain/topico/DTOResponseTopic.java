@@ -1,7 +1,7 @@
 package foro.hub.api.domain.topico;
 
-import foro.hub.api.domain.usuarios.Usuario;
-import jakarta.persistence.*;
+import foro.hub.api.domain.curso.Curso;
+import foro.hub.api.domain.usuarios.DTOInfoUsuario;
 
 import java.util.Date;
 
@@ -10,11 +10,17 @@ public record DTOResponseTopic(Long id,
                                String mensaje,
                                Date fechaCreacion,
                                TopicStatus status,
-                               Usuario autor,
-                               String curso) {
+                               DTOInfoUsuario autor,
+                               Curso curso) {
 
     public DTOResponseTopic(Topico topico) {
-        this(topico.getId(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(),topico.getStatus(),topico.getAutor(),topico.getCurso());
+        this(topico.getId(),
+                topico.getTitulo(),
+                topico.getMensaje(),
+                topico.getFechaCreacion(),
+                topico.getStatus(),
+                new DTOInfoUsuario(topico.getAutor().getId(),topico.getAutor().getPerfil().getNombre()),
+                topico.getCurso());
     }
 }
 

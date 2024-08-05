@@ -1,10 +1,8 @@
 package foro.hub.api.domain.usuarios;
 
+import foro.hub.api.domain.perfil.Perfil;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +13,7 @@ import java.util.List;
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -29,6 +28,20 @@ public class Usuario implements UserDetails {
 
     @Column(nullable = false)
     private String clave;
+
+    @Column(nullable = false)
+    private String email;
+
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "perfil_id")
+    private Perfil perfil;
+
+    public Usuario(DTORegistroUsuario dtoRegistroUsuario){
+        this.login =  dtoRegistroUsuario.login();
+        this.clave =  dtoRegistroUsuario.clave();
+        this.email =  dtoRegistroUsuario.email();
+        this.perfil =  dtoRegistroUsuario.perfil();
+    }
 
 
     @Override

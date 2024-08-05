@@ -1,0 +1,1 @@
+ALTER TABLE topicos ADD COLUMN num_respuestas INT DEFAULT 0;

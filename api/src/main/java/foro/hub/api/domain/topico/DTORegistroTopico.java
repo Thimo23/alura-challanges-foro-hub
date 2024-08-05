@@ -1,10 +1,9 @@
 package foro.hub.api.domain.topico;
 
-import foro.hub.api.domain.usuarios.Usuario;
+import foro.hub.api.domain.curso.DTOCurso;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.Date;
 
 public record DTORegistroTopico(
        @NotBlank
@@ -14,7 +13,6 @@ public record DTORegistroTopico(
         @NotNull
         TopicStatus status,
         @NotNull
-        Usuario autor,
-        @NotBlank
-        String curso) {
+        @Valid
+        DTOCurso curso) {
 }
