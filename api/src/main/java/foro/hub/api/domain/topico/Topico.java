@@ -56,7 +56,6 @@ public class Topico {
         this.curso = new Curso(
                 dtoRegistroTopico.curso().nombre(),
                 dtoRegistroTopico.curso().categoria());
-        this.autor = dtoRegistroTopico.autor();
     }
 
     public void actualizarDatos(DTOActualizarTopico dtoActualizarTopico){
