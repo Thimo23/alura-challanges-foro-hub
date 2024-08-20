@@ -1,8 +1,8 @@
 package foro.hub.api.controller;
 
-import foro.hub.api.domain.topico.*;
 
-import foro.hub.api.domain.usuarios.DTOInfoUsuario;
+import foro.hub.api.domain.respuestas.RespuestaRepository;
+import foro.hub.api.domain.topico.*;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+
+
 @RestController
 @RequestMapping("/topicos")
 public class TopicoController {
@@ -23,6 +25,10 @@ public class TopicoController {
     @Autowired
     private TopicoService topicoService;
 
+    @Autowired
+    RespuestaRepository respuestaRepository;
+
+    @Transactional
     @PostMapping
     public ResponseEntity<DTOResponseTopic> registrarTopico(@RequestBody @Valid DTORegistroTopico dtoRegistroTopico,
                                                             UriComponentsBuilder uriComponentsBuilder){
@@ -34,23 +40,21 @@ public class TopicoController {
 
     }
 
+    @Transactional
     @GetMapping
     public ResponseEntity<Page<DTOListadoTopico>> listadoTopicos(@PageableDefault(size = 2) Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAllByOrderByFechaCreacionDesc(paginacion).map(DTOListadoTopico::new));
     }
 
+    @Transactional
     @GetMapping("/{id}")
-    public ResponseEntity<DTOResponseTopic>retornarDatosTopico(@PathVariable @Valid Long id){
-        Topico topico = topicoRepository.getReferenceById(id);
-        DTOResponseTopic dtoResponseTopic = new DTOResponseTopic(
-                topico.getId(), topico.getTitulo(),topico.getMensaje(),
-                topico.getFechaCreacion(),topico.getStatus(),
-                new DTOInfoUsuario(topico.getId(),topico.getAutor().getPerfil().getNombre()),
-                topico.getCurso());
+    public ResponseEntity<DTOTopicoYRespuestas>retornarDatosTopico(@PathVariable @Valid Long id,@PageableDefault(size = 2) Pageable pag){
 
-        return ResponseEntity.ok(dtoResponseTopic);
+       DTOTopicoYRespuestas dtoTopicoYRespuestas = topicoService.retonarDatosTopico(id,pag);
+       return ResponseEntity.ok(dtoTopicoYRespuestas);
     }
 
+    @Transactional
     @PutMapping
     public ResponseEntity actualizarTopico(@RequestBody @Valid DTOActualizarTopico dtoActualizarTopico){
         DTOResponseTopic topicoActualizado = topicoService.actualizarTopico(dtoActualizarTopico);

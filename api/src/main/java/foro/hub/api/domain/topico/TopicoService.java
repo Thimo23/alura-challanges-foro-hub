@@ -1,11 +1,15 @@
 package foro.hub.api.domain.topico;
 
+import foro.hub.api.domain.respuestas.DTOResponseRespuesta;
+import foro.hub.api.domain.respuestas.RespuestaRepository;
 import foro.hub.api.domain.topico.validaciones.ValidadorDeTopicos;
 import foro.hub.api.domain.usuarios.DTOInfoUsuario;
 import foro.hub.api.domain.usuarios.Usuario;
 import foro.hub.api.infra.errores.AuthorizationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,9 @@ public class TopicoService {
     private TopicoRepository topicoRepository;
     @Autowired
     List<ValidadorDeTopicos> validadores;
+
+    @Autowired
+    RespuestaRepository respuestaRepository;
 
 
     public DTOResponseTopic actualizarTopico(DTOActualizarTopico datos){
@@ -38,13 +45,13 @@ public class TopicoService {
                 topico.getId(), topico.getTitulo(),topico.getMensaje(),
                 topico.getFechaCreacion(),topico.getStatus(),
                 new DTOInfoUsuario(topico.getId(), topico.getAutor().getPerfil().getNombre()),
-                topico.getCurso()));
+                topico.getCurso(), topico.getNumRespuestas()));
 
     }
 
     public DTOResponseTopic registrarTopico(DTORegistroTopico datos){
         Usuario userDetailsAuthenticated = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var topico = new Topico(datos);
+        Topico topico = new Topico();
 
         topico.setAutor(userDetailsAuthenticated);
 
@@ -55,7 +62,7 @@ public class TopicoService {
                 topico.getId(), topico.getTitulo(),topico.getMensaje(),
                 topico.getFechaCreacion(),topico.getStatus(),
                 new DTOInfoUsuario(topico.getId(), topico.getAutor().getPerfil().getNombre()),
-                topico.getCurso()));
+                topico.getCurso(), topico.getNumRespuestas()));
 
     }
 
@@ -75,6 +82,22 @@ public class TopicoService {
 
         topicoRepository.deleteById(id);
 
+    }
+
+    public DTOTopicoYRespuestas retonarDatosTopico(Long id, Pageable pag){
+        Topico topico = topicoRepository.getReferenceById(id);
+
+        DTOResponseTopic dtoResponseTopic = new DTOResponseTopic(
+                topico.getId(), topico.getTitulo(),topico.getMensaje(),
+                topico.getFechaCreacion(),topico.getStatus(),
+                new DTOInfoUsuario(topico.getId(),topico.getAutor().getPerfil().getNombre()),
+                topico.getCurso(), topico.getNumRespuestas());
+
+        Page<DTOResponseRespuesta> dtoResponseRespuestas = respuestaRepository.findAllByTopicoIdOrderBySolucionDesc(id,pag)
+                .map(DTOResponseRespuesta::new);
+
+
+        return new DTOTopicoYRespuestas(dtoResponseTopic,dtoResponseRespuestas);
     }
 
 }

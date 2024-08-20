@@ -10,14 +10,16 @@ public record DTOListadoTopico(
         Date fechaCreacion,
         TopicStatus status,
         DTOInfoUsuario autor,
-        Curso curso
-) {
+        Curso curso,
+        int cantRespuestas)
+ {
     public DTOListadoTopico(Topico topico){
         this(topico.getId(),
                 topico.getTitulo(),
                 topico.getFechaCreacion(),
                 topico.getStatus(),
                 new DTOInfoUsuario(topico.getId(),topico.getAutor().getPerfil().getNombre()),
-                topico.getCurso());
+                topico.getCurso(),
+        topico.getNumRespuestas());
     }
 }

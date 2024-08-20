@@ -43,7 +43,6 @@ public class UsuarioService {
         return (new DTOResponseUsuario(
                 nuevoUsuario.getId(),
                 nuevoUsuario.getUsername(),
-                nuevoUsuario.getPassword(),
                 nuevoUsuario.getEmail(),
                 nuevoUsuario.getPerfil()
         ));

@@ -8,7 +8,3 @@ solucion TINYINT(1) DEFAULT 0,
 FOREIGN KEY (topico_id) REFERENCES topicos(id) ON DELETE CASCADE,
 FOREIGN KEY (autor_id) REFERENCES usuarios(id)
 );
-
-ALTER TABLE respuestas
-ADD CONSTRAINT unique_solucion_per_topico
-UNIQUE (topico_id, solucion);

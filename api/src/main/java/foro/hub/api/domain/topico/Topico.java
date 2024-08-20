@@ -45,6 +45,9 @@ public class Topico {
     @JoinColumn(name = "curso_id",nullable = false)
     private Curso curso;
 
+    @Column(name = "num_respuestas")
+    private int numRespuestas;
+
     public Topico(DTORegistroTopico dtoRegistroTopico) {
         this.titulo = dtoRegistroTopico.titulo();
         this.mensaje = dtoRegistroTopico.mensaje();
@@ -53,6 +56,7 @@ public class Topico {
         this.curso = new Curso(
                 dtoRegistroTopico.curso().nombre(),
                 dtoRegistroTopico.curso().categoria());
+        this.autor = dtoRegistroTopico.autor();
     }
 
     public void actualizarDatos(DTOActualizarTopico dtoActualizarTopico){
