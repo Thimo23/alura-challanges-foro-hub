@@ -1,5 +1,6 @@
 package foro.hub.api.domain.usuarios;
 
+import foro.hub.api.domain.perfil.Perfil;
 import foro.hub.api.domain.perfil.PerfilRepository;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,6 @@ public class UsuarioService {
 
     public DTOResponseUsuario registrarUsuario(DTORegistroUsuario dtoRegistroUsuario){
 
-
-
-
         if(usuarioRepository.findByEmail(dtoRegistroUsuario.email()).isPresent()){
             throw new ValidationException("El email ingresado ya se encuentra registrado");
         }
@@ -30,12 +28,13 @@ public class UsuarioService {
             throw new ValidationException("El usuario ingresado ya existe");
         }
 
-        if(perfilRepository.findByNombre(dtoRegistroUsuario.perfil().getNombre()).isPresent()){
+        if(perfilRepository.findByNombre(dtoRegistroUsuario.nombrePerfil()).isPresent()){
             throw new ValidationException("El nombre de perfil ya esta en uso");
         }
 
         Usuario nuevoUsuario = new Usuario(dtoRegistroUsuario);
 
+      //  nuevoUsuario.setPerfil(new Perfil(dtoRegistroUsuario.nombrePerfil()));
         nuevoUsuario.setClave(bCryptPasswordEncoder.encode(nuevoUsuario.getPassword()));
 
         usuarioRepository.save(nuevoUsuario);

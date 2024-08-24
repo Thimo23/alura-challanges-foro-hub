@@ -4,6 +4,9 @@ import foro.hub.api.domain.usuarios.DTOAuthUsuario;
 import foro.hub.api.domain.usuarios.Usuario;
 import foro.hub.api.infra.security.DTOJWTToken;
 import foro.hub.api.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
+@Tag(name = "Autenticacion", description = "obtiene el token para el usuario asignado que da acceso al resto de endpoints")
 public class AutenticacionController {
     @Autowired
     private AuthenticationManager authenticationManager;

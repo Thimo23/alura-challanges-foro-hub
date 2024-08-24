@@ -1,8 +1,8 @@
 package foro.hub.api.domain.respuestas;
 
-import foro.hub.api.domain.topico.Topico;
+
+import foro.hub.api.domain.respuestas.validaciones.ValidadorDeRespuestas;
 import foro.hub.api.domain.topico.TopicoRepository;
-import foro.hub.api.domain.usuarios.DTOInfoUsuario;
 import foro.hub.api.domain.usuarios.Usuario;
 import foro.hub.api.domain.usuarios.UsuarioRepository;
 import foro.hub.api.infra.errores.AuthorizationException;
@@ -10,8 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class RespuestaService {
@@ -25,25 +24,25 @@ public class RespuestaService {
     @Autowired
     private RespuestaRepository respuestaRepository;
 
+    @Autowired
+    List<ValidadorDeRespuestas> validadores;
+
     public DTOResponseRespuesta registrarRespuesta(DTORegistroRespuesta dtoRegistroRespuesta){
 
         Usuario userDetailsAuthenticated = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-         Respuesta nuevaRespuesta = new Respuesta(new DTORegistroRespuesta(
-                 dtoRegistroRespuesta.mensaje(),
-                 dtoRegistroRespuesta.topicoID(),
-                    new DTOInfoUsuario(userDetailsAuthenticated.getId(),
-                         userDetailsAuthenticated.getPerfil().getNombre())));
+        Respuesta nuevaRespuesta = new Respuesta(dtoRegistroRespuesta.mensaje());
 
         nuevaRespuesta.setAutor(userDetailsAuthenticated);
 
-        Optional<Topico> topicoApuntado = topicoRepository.findById(dtoRegistroRespuesta.topicoID());
+        var topicoApuntado = topicoRepository.findById(dtoRegistroRespuesta.topicoID());
 
         if(topicoApuntado.isEmpty()){
             throw new EntityNotFoundException();
         }
         //Si el topico apuntado no existe la aplicación devolvera "404 entity not found". Este error se produce a nivel base de datos pero lo manejamos de esta menera.
 
+        validadores.forEach(v -> v.validar(dtoRegistroRespuesta));
         nuevaRespuesta.setTopico(topicoApuntado.get());
 
         respuestaRepository.save(nuevaRespuesta);
@@ -67,6 +66,7 @@ public class RespuestaService {
             throw new AuthorizationException("No tienes permisos para editar esta respuesta");
         }
 
+        validadores.forEach(v -> v.validar(dtoActualizarRespuesta));
         respuesta.actualizarDatos(dtoActualizarRespuesta);
         respuestaRepository.save(respuesta);
 

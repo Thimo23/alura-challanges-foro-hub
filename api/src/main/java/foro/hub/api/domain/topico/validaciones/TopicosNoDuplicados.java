@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TopicosNoDuplicados implements ValidadorDeTopicos{
+public class TopicosNoDuplicados implements ValidadorDeDuplicados {
     @Autowired
     private TopicoRepository repository;
 

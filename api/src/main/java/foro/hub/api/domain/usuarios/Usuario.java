@@ -40,7 +40,7 @@ public class Usuario implements UserDetails {
         this.login =  dtoRegistroUsuario.login();
         this.clave =  dtoRegistroUsuario.clave();
         this.email =  dtoRegistroUsuario.email();
-        this.perfil =  dtoRegistroUsuario.perfil();
+        this.perfil = new Perfil(dtoRegistroUsuario.nombrePerfil());
     }
 
 

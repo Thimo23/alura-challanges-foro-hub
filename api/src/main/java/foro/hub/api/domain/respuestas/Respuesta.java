@@ -1,8 +1,7 @@
 package foro.hub.api.domain.respuestas;
 
-import foro.hub.api.domain.topico.DTOActualizarTopico;
+
 import foro.hub.api.domain.topico.Topico;
-import foro.hub.api.domain.usuarios.DTOInfoUsuario;
 import foro.hub.api.domain.usuarios.Usuario;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -43,8 +42,8 @@ public class Respuesta {
     private boolean solucion;
 
 
-    public Respuesta(DTORegistroRespuesta dtoRegistroRespuesta){
-        this.mensaje = dtoRegistroRespuesta.mensaje();
+    public Respuesta(String mensaje) {
+        this.mensaje = mensaje;
         this.fechaCreacion = new Date();
         this.solucion = false;
     }

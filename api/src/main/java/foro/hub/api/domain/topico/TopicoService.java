@@ -2,7 +2,7 @@ package foro.hub.api.domain.topico;
 
 import foro.hub.api.domain.respuestas.DTOResponseRespuesta;
 import foro.hub.api.domain.respuestas.RespuestaRepository;
-import foro.hub.api.domain.topico.validaciones.ValidadorDeTopicos;
+import foro.hub.api.domain.topico.validaciones.ValidadorDeDuplicados;
 import foro.hub.api.domain.usuarios.DTOInfoUsuario;
 import foro.hub.api.domain.usuarios.Usuario;
 import foro.hub.api.infra.errores.AuthorizationException;
@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 
 @Service
@@ -22,7 +22,7 @@ public class TopicoService {
     @Autowired
     private TopicoRepository topicoRepository;
     @Autowired
-    List<ValidadorDeTopicos> validadores;
+    List<ValidadorDeDuplicados> validadores;
 
     @Autowired
     RespuestaRepository respuestaRepository;
@@ -51,7 +51,7 @@ public class TopicoService {
 
     public DTOResponseTopic registrarTopico(DTORegistroTopico datos){
         Usuario userDetailsAuthenticated = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Topico topico = new Topico();
+        Topico topico = new Topico(datos);
 
         topico.setAutor(userDetailsAuthenticated);
 
@@ -70,7 +70,7 @@ public class TopicoService {
 
         Usuario userDetailsAuthenticated = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Optional<Topico> topico = topicoRepository.findById(id);
+        var topico = topicoRepository.findById(id);
 
         if(!topico.isPresent()){
             throw new EntityNotFoundException("El tópico con ID " + id + " no existe");

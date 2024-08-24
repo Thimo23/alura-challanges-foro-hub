@@ -18,4 +18,8 @@ public class Perfil {
 
     @Column(nullable = false)
     private String nombre;
+
+    public Perfil(String nombre){
+        this.nombre = nombre;
+    }
 }
