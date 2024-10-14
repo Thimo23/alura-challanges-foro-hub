@@ -4,7 +4,16 @@
   Foro-Hub es una API REST diseñada para gestionar un foro con temática de escuela de programación. Permite realizar operaciones CRUD sobre tópicos, respuestas y usuarios, además de manejar autenticación y autorización.
 </p>
 
-<h2>Tecnologías utilizadas</h2>
+<h2>Índice</h2>
+<ul>
+  <li><a href="#tecnologias-utilizadas">Tecnologías Utilizadas</a></li>
+  <li><a href="#instalacion-y-configuracion">Instalación y Configuración</a></li>
+  <li><a href="#usos">Usos</a></li>
+  <li><a href="#funcionalidades">Funcionalidades</a></li>
+  <li><a href="#documentacion-api">Documentación API</a></li>
+  <li><a href="#agradecimientos-y-contribuciones">Agradecimientos y Contribuciones</a></li>
+</ul>
+<h2 id="tecnologias-utilizadas">Tecnologías utilizadas</h2>
 <ul>
   <li>Java 17</li>
   <li>Spring Boot 3.3.1</li>
@@ -18,7 +27,7 @@
   <li>SpringDoc OpenAPI</li>
 </ul>
 
-<h2>Instalación y Configuración</h2>
+<h2 id="instalacion-y-configuracion">Instalación y Configuración</h2>
 <p>Clona el repositorio:</p>
 <pre>git clone https://github.com/thimo23/alura-challanges-foro-hub.git</pre>
 <p>Instala las dependencias Maven:</p>
@@ -27,7 +36,80 @@
 <p>Ejecuta el proyecto:</p>
 <pre>mvn spring-boot:run</pre>
 
-<h2>Casos de Uso y Funcionalidades</h2>
+<h2 id="usos">Usos</h2>
+<ol>
+    <li>
+        <strong>Registrar un nuevo tópico</strong><br>
+        <strong>Endpoint:</strong> POST /topicos<br>
+        <strong>Descripción:</strong> Este endpoint permite registrar un nuevo tópico en la base de datos.<br>
+        <strong>JSON de solicitud:</strong>
+        <pre>
+{
+  "titulo": "Título del tópico",
+  "mensaje": "Mensaje del tópico",
+  "curso": "Nombre del curso"
+}
+        </pre>
+    </li>
+    <li>
+        <strong>Listar todos los tópicos</strong><br>
+        <strong>Endpoint:</strong> GET /topicos<br>
+        <strong>Descripción:</strong> Devuelve una lista paginada de todos los tópicos registrados en la base de datos.<br>
+        <strong>Parámetros:</strong> page, size, sort<br>
+        <strong>Ejemplo de solicitud:</strong> /topicos?page=0&size=10&sort=fechaCreacion
+    </li>
+    <li>
+        <strong>Registrar una nueva respuesta a un tópico</strong><br>
+        <strong>Endpoint:</strong> POST /respuestas<br>
+        <strong>Descripción:</strong> Permite registrar una nueva respuesta asociada a un tópico específico.<br>
+        <strong>JSON de solicitud:</strong>
+        <pre>
+{
+  "mensaje": "Mensaje de la respuesta",
+  "topicoID": "ID del tópico al que se responde"
+}
+        </pre>
+    </li>
+    <li>
+        <strong>Actualizar una respuesta</strong><br>
+        <strong>Endpoint:</strong> PUT /respuestas<br>
+        <strong>Descripción:</strong> Permite editar el contenido de una respuesta existente.<br>
+        <strong>JSON de solicitud:</strong>
+        <pre>
+{
+  "iDRespuesta": "ID de la respuesta a actualizar",
+  "mensaje": "Nuevo mensaje de la respuesta"
+}
+        </pre>
+    </li>
+    <li>
+        <strong>Registrar un nuevo usuario</strong><br>
+        <strong>Endpoint:</strong> POST /usuarios<br>
+        <strong>Descripción:</strong> Registra un nuevo usuario en el sistema.<br>
+        <strong>JSON de solicitud:</strong>
+        <pre>
+{
+  "nombre": "Nombre del usuario",
+  "email": "Email del usuario",
+  "password": "Contraseña"
+}
+        </pre>
+    </li>
+    <li>
+        <strong>Autenticación de usuario</strong><br>
+        <strong>Endpoint:</strong> POST /login<br>
+        <strong>Descripción:</strong> Obtiene un token JWT para un usuario registrado, permitiendo el acceso a endpoints protegidos.<br>
+        <strong>JSON de solicitud:</strong>
+        <pre>
+{
+  "email": "Email del usuario",
+  "password": "Contraseña"
+}
+        </pre>
+    </li>
+</ol>
+
+<h2 id="funcionalidades">Funcionalidades</h2>
 <p>El proyecto <strong>foro-hub</strong> ofrece una plataforma de discusión para una comunidad enfocada en la programación. A continuación, se detallan sus principales funcionalidades:</p>
 
 <ul>
@@ -171,7 +253,41 @@ public DTOTopicoYRespuestas retonarDatosTopico(Long id, Pageable pag){
     <p>También puedes ver su implementación en la Clase Service:</p>
     <a href="./api/src/main/java/foro/hub/api/infra/security/AuthLoginService.java">AuthLoginService.java</a>  
 </li>
-
+<li>
+  <h4>Tests Unitarios y de Integración</h4>
+  <p>En proceso... ⏳</p>
+</li>
 </ul>
+<h2 id="documentacion-api">Como acceder a la documentación</h2>
+<p>Para acceder a la documentación de la API de Foro-hub, que ha sido generada utilizando SpringDoc, sigue los siguientes pasos:</p>
+<ol>
+    <li>
+        Asegúrate de que la aplicación esté en ejecución. Si no está en ejecución, puedes iniciarla utilizando Maven con el siguiente comando en la terminal, ubicándote en el directorio raíz del proyecto (donde se encuentra el archivo <code>pom.xml</code>):
+        <pre>mvn spring-boot:run</pre>
+    </li>
+    <li>
+        Una vez que la aplicación esté en ejecución, abre un navegador web y visita la URL de la documentación de la API generada por SpringDoc. La URL por defecto para acceder a la documentación de la API es:
+        <pre>http://localhost:8080/swagger-ui/index.html</pre>
+        Reemplaza <code>localhost</code> y <code>8080</code> si tu aplicación se está ejecutando en una dirección o puerto diferente.
+    </li>
+    <li>
+        En la página de documentación de la API, verás una interfaz de usuario interactiva proporcionada por Swagger UI, donde se listan todos los endpoints disponibles en la API de Foro-hub. La documentación incluye detalles como los métodos HTTP (GET, POST, PUT, DELETE), los parámetros de entrada, los modelos de datos, y las respuestas esperadas para cada endpoint.
+    </li>
+    <li>
+        Puedes interactuar con la API directamente desde esta interfaz de usuario. Para hacerlo, haz clic en cualquier endpoint listado para expandir sus detalles. Luego, puedes probar el endpoint haciendo clic en el botón <strong>Try it out</strong>, llenando los parámetros necesarios si los hay, y finalmente haciendo clic en <strong>Execute</strong>. Verás la respuesta de la API directamente en la interfaz.
+    </li>
+</ol>
 
+<h2 id="agradecimientos-y-contribuciones">Agradecimientos y Contribuciones</h2>
+<p>Quiero expresar mi más sincero agradecimiento al programa <strong>Oracle Next Education</strong> y a la plataforma <strong>Alura</strong> por ofrecerme este desafío. Gracias a esta experiencia, he podido diversificar mis conocimientos en el desarrollo backend y mejorar mis habilidades técnicas.</p>
 
+<h3>Contribuciones</h3>
+
+<p>Si deseas contribuir a este proyecto, aquí hay algunas maneras en las que puedes hacerlo:</p>
+
+<ul>
+    <li><strong>Reportar Issues:</strong> Si encuentras errores o tienes sugerencias de mejora, no dudes en abrir un issue en este repositorio.</li>
+    <li><strong>Pull Requests:</strong> Si tienes mejoras o nuevas funcionalidades que deseas implementar, ¡estaré encantado de revisar tus pull requests!</li>
+    <li><strong>Documentación:</strong> Ayuda a mejorar la documentación del proyecto. Cualquier aportación en este sentido es muy valiosa.</li>
+    <li><strong>Feedback:</strong> Cualquier comentario sobre el proyecto es bienvenido. Tu opinión puede ayudar a hacer de este un mejor recurso para todos.</li>
+</ul>
