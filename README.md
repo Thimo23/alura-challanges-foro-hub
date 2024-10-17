@@ -191,6 +191,11 @@ ResponseEntity registrarRespuesta(@RequestBody @Valid DTORegistroRespuesta dtoRe
 validadores.forEach(v->v.validar(datos));
 </code>
     </pre>
+    Para ver más sobre la implementación de validaciones:
+    <br>
+    <a href="./api/src/main/java/foro/hub/api/domain/respuestas/validaciones">Para las Respuestas</a>
+    <br>
+    <a href="./api/src/main/java/foro/hub/api/domain/topico/validaciones">Para los Tópicos</a>
   </li>
   <li>
     <h4>Paginación de Tópicos y Respuestas</h4> 
